@@ -1,0 +1,13 @@
+*.csv
+*.pkl
+*.ipynb_checkpoints
+__pycache__/
+*.log
+*.tmp
+*.bak
+*.swp
+
+*.jsonl
+
+
+.DS_Store

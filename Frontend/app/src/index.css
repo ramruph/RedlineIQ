@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-primary: #709775; /* Sage Green */
+  --color-primary-container: #4a634d;
+  --color-on-primary-container: #ffffff;
+  
+  --color-secondary: #d4af37; /* Muted Gold for accents */
+  --color-secondary-container: #8b7500;
+  
+  --color-surface: #0a0a0a; /* Carbon Black */
+  --color-surface-dim: #050505;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-low: #121212;
+  --color-surface-container-high: #1a1a1a;
+  --color-surface-container-highest: #222222;
+  
+  --color-on-surface: #e0e0e0;
+  --color-on-surface-variant: #b0b0b0;
+  
+  --color-outline: #4a634d;
+  --color-outline-variant: #2a2a2a;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased select-none overflow-hidden h-screen;
+    background-image: 
+      radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  * {
+    @apply border-0 rounded-none;
+    border-color: var(--color-outline-variant);
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-surface-container-highest/60 backdrop-blur-xl border border-outline-variant/30;
+  }
+
+  .technical-border-b {
+    @apply border-b-2 border-outline-variant/30 focus-within:border-primary transition-colors;
+  }
+
+  .scanline {
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(255, 255, 255, 0.02) 50.5%,
+      transparent 51%
+    );
+    background-size: 100% 4px;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-blink {
+  animation: blink 1.5s infinite;
+}

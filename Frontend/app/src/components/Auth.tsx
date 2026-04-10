@@ -36,7 +36,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin }) =>
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-7xl md:text-9xl font-headline font-black italic tracking-tighter uppercase mb-8 leading-none"
           >
-            APEX_<span className="text-primary">VELOCITY</span>
+            RED<span className="text-primary">LINEIQ</span>
           </motion.h1>
 
           <motion.p

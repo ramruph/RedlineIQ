@@ -59,7 +59,7 @@ export const ApexIntelligence: React.FC<ApexIntelligenceProps> = ({ car, goals }
               <div className="p-2 bg-primary/10 text-primary border border-primary/20">
                 <BrainCircuit className="w-6 h-6" />
               </div>
-              <span className="font-mono text-[10px] text-primary tracking-[0.4em] font-black uppercase">APEX_INTELLIGENCE // CORE_v3.1</span>
+              <span className="font-mono text-[10px] text-primary tracking-[0.4em] font-black uppercase">RedLine_INTELLIGENCE // CORE_v3.1</span>
             </div>
             <h1 className="font-headline text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-2">INTELLIGENCE_LAB</h1>
             <p className="font-mono text-[11px] text-outline uppercase tracking-widest">NEURAL_NETWORK_TUNING_AND_PERFORMANCE_SIMULATION</p>

@@ -142,13 +142,13 @@ export default function App() {
           <footer className="hidden md:flex absolute bottom-0 left-0 right-0 h-10 z-40 items-center justify-between px-6 bg-surface-container-low/80 backdrop-blur-md border-t border-outline-variant/10 cursor-crosshair">
             <div className="flex items-center gap-4">
               <span className="font-mono text-[9px] text-secondary tabular-nums uppercase tracking-widest">
-                CORE_LATENCY: 14MS // BUFFER: 0% // STATUS: OPTIMIZED // SYSTEM_UPTIME: 00:42:12
+                {new Date().getFullYear()} &copy; RedLineIQ Build Simulator <span className="text-outline-variant">v0.1.0 beta</span>
               </span>
             </div>
             <div className="flex gap-8">
               <a className="font-mono text-[9px] text-outline-variant hover:text-white transition-colors uppercase tracking-widest" href="#">GITHUB_REPO</a>
               <a className="font-mono text-[9px] text-outline-variant hover:text-white transition-colors uppercase tracking-widest" href="#">API_DOCS</a>
-              <a className="font-mono text-[9px] text-secondary underline uppercase tracking-widest" href="#">V0.8.4_ALPHA</a>
+              <a className="font-mono text-[9px] text-secondary underline uppercase tracking-widest" href="#">v0.1.0 beta</a>
             </div>
           </footer>
         </main>

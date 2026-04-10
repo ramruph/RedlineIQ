@@ -149,7 +149,7 @@ export const WatchList: React.FC = () => {
                     </div>
                     
                     <div className="p-4 bg-surface-container-high/50 border-l-2 border-secondary">
-                      <div className="text-[10px] font-bold text-outline uppercase mb-1">APEX_INTERNAL_PRICE</div>
+                      <div className="text-[10px] font-bold text-outline uppercase mb-1">REDLINE_INTERNAL_PRICE</div>
                       <div className="text-3xl font-headline font-bold tabular-nums">${item.currentPrice.toLocaleString()}</div>
                     </div>
                   </div>

@@ -200,7 +200,7 @@ export const TopNav: React.FC<{
         >
           <Menu className="w-5 h-5 text-primary" />
         </button>
-        <span className="text-xl font-black text-primary italic font-headline uppercase tracking-widest truncate max-w-[150px] md:max-w-none select-none">APEX_VELOCITY</span>
+        <span className="text-xl font-black text-primary italic font-headline uppercase tracking-widest truncate max-w-[150px] md:max-w-none select-none">RedLineIQ</span>
         <div className="hidden xl:flex gap-6 items-center">
           {navLinks.map((link) => (
             <button

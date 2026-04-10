@@ -138,3 +138,10 @@ Frontend = display layer
 ML = intelligence upgrade later
 
 
+
+FastAPI is responsible for:
+- receiving HTTP requests
+- validating incoming data
+- getting a database session
+- calling your engine logic
+- returning structured JSON responses

@@ -1,8 +1,19 @@
 import React from 'react';
 import { DRIVETRAIN_PARTS } from '../constants';
 import { CreditCard, TrendingUp, Rss, Wind, Cpu, Droplets } from 'lucide-react';
+import type { BuildAnalysisResult } from '../types/api';
 
-export const Pricing: React.FC = () => {
+interface PricingProps {
+  analysis?: BuildAnalysisResult | null;
+  budget?: number;
+}
+
+
+export const Pricing: React.FC<PricingProps> = ({ analysis, budget }) => {
+  const selectedParts = analysis?.selected_parts ?? [];
+  const projectedCost = analysis?.score.projected_cost_usd ?? 0;
+  const remainingBudget =
+    typeof budget === 'number' ? budget - projectedCost : null;
   return (
     <div className="pt-8 pb-20 px-6 min-h-screen overflow-y-auto hide-scrollbar">
       {/* Top Budget Tracking vs Actual */}
@@ -14,7 +25,7 @@ export const Pricing: React.FC = () => {
               <p className="font-label text-[10px] tracking-widest text-outline uppercase">Phase 04: Apex Velocity Build-Out</p>
             </div>
             <div className="text-right">
-              <span className="font-headline text-4xl font-black text-primary tracking-tight tabular-nums">$84,200.00</span>
+              <span className="font-headline text-4xl font-black text-primary tracking-tight tabular-nums">${projectedCost.toLocaleString()}</span>
               <p className="font-label text-[10px] tracking-widest text-outline uppercase">Projected Burn Rate</p>
             </div>
           </div>
@@ -29,7 +40,7 @@ export const Pricing: React.FC = () => {
           </div>
           <div className="flex justify-between font-label text-[9px] text-outline uppercase font-bold">
             <span>Expended: $48,000.00</span>
-            <span>Remaining: $36,200.00</span>
+            <span>Remaining: {remainingBudget !== null ? `$${remainingBudget.toLocaleString()}` : '--'}</span>
           </div>
         </div>
         <div className="bg-surface-container-high p-6 flex flex-col justify-center border-l-4 border-secondary">
@@ -134,6 +145,23 @@ export const Pricing: React.FC = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+          <div className="bg-surface-container-low p-6">
+            <h3 className="font-headline text-xl font-bold uppercase tracking-tight mb-6">
+              SELECTED_PART_COST_BREAKDOWN
+            </h3>
+            <div className="space-y-3">
+              {selectedParts.length === 0 ? (
+                <p className="text-sm text-outline">No computed build yet.</p>
+              ) : (
+                selectedParts.map((part) => (
+                  <div key={part.part_id} className="flex justify-between items-center">
+                    <span className="text-sm font-bold uppercase">{part.name}</span>
+                    <span className="font-mono text-sm">${part.price_usd.toLocaleString()}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

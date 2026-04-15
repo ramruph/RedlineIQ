@@ -3,16 +3,21 @@ import { DRIVETRAIN_PARTS } from '../constants';
 import { Bolt, Settings2, Terminal, Check, X, Save, FolderOpen, ArrowRightLeft, Eye, Sparkles, Share2 } from 'lucide-react';
 import { Part, WatchlistItem, BuildGoals, Car } from '../types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
+import type { BuildAnalysisResult } from '../types/api';
 
 interface DrivetrainProps {
   goals: BuildGoals;
   car: Car;
+  analysis?: BuildAnalysisResult | null;
 }
 
-export const Drivetrain: React.FC<DrivetrainProps> = ({ goals, car }) => {
+export const Drivetrain: React.FC<DrivetrainProps> = ({ goals, car, analysis }) => {
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const [comparisonMode, setComparisonMode] = useState(false);
   const [savedConfigs, setSavedConfigs] = useState<{ name: string; parts: string[] }[]>([]);
+  const backendSelectedPartIds = new Set(
+    analysis?.selected_parts.map((p) => p.part_id) ?? []
+  );
 
   // Generate mock curve data for comparison
   const generateCurveData = (parts: Part[]) => {
@@ -97,7 +102,12 @@ export const Drivetrain: React.FC<DrivetrainProps> = ({ goals, car }) => {
       setSavedConfigs(JSON.parse(saved));
     }
   }, []);
-
+  
+  useEffect(() => {
+    if (analysis?.selected_parts?.length) {
+      setSelectedParts(analysis.selected_parts.map((p) => p.part_id).slice(0, 4));
+    }
+  }, [analysis]);
   const togglePartSelection = (id: string) => {
     setSelectedParts(prev => {
       const isSelected = prev.includes(id);

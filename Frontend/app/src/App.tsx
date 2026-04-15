@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
+import { BuildGoals } from './components/BuildGoals';
+import { useBuildAnalysis } from './hooks/useBuildAnalysis';
+import type { AnalyzeBuildRequest } from './types/api';
+
 import { Screen, Car } from './types';
 import { Sidebar, TopNav } from './components/Layout';
 import { Garage } from './components/Garage';
-import { Telemetry } from './components/Telemetry';
+// import { Telemetry } from './components/Telemetry';
 import { Drivetrain } from './components/Drivetrain';
 import { Performance } from './components/Performance';
-import { Staging } from './components/Staging';
+// import { Staging } from './components/Staging';
 import { Pricing } from './components/Pricing';
 import { Reliability } from './components/Reliability';
-import { Workflow } from './components/Workflow';
-import { Aero } from './components/Aero';
-import { Chassis } from './components/Chassis';
-import { Electronics } from './components/Electronics';
-import { PartsPricing } from './components/PartsPricing';
+// import { Workflow } from './components/Workflow';
+// import { Aero } from './components/Aero';
+// import { Chassis } from './components/Chassis';
+// import { Electronics } from './components/Electronics';
+// import { PartsPricing } from './components/PartsPricing';
 import { Catalogue } from './components/Catalogue';
-import { ChassisMarketplace } from './components/ChassisMarketplace';
-import { WatchList } from './components/WatchList';
-import { IntelFeed } from './components/IntelFeed';
+// import { ChassisMarketplace } from './components/ChassisMarketplace';
+// import { WatchList } from './components/WatchList';
+// import { IntelFeed } from './components/IntelFeed';
 import { ApexIntelligence } from './components/ApexIntelligence';
-import { BuildLog } from './components/BuildLog';
+// import { BuildLog } from './components/BuildLog';
 import { LandingPage, LoginPage, UserProfile } from './components/Auth';
 import { CARS } from './constants';
 import { BuildGoals as BuildGoalsType, User } from './types';
@@ -49,6 +53,46 @@ export default function App() {
     setActiveScreen('LANDING');
   };
 
+  const {
+    analysis,
+    isLoading: analysisLoading,
+    error: analysisError,
+    runAnalysis,
+  } = useBuildAnalysis();
+
+  const mapActivityToApi = (
+    activity: BuildGoalsType['activity']
+  ): AnalyzeBuildRequest['activity_type'] => {
+    switch (activity) {
+      case 'DRAG_RACING':
+        return 'DRAG';
+      case 'CIRCUIT_RACING':
+        return 'CIRCUIT';
+      case 'TIME_ATTACK':
+        return 'TIME_ATTACK';
+      case 'DRIFT':
+        return 'DRIFT';
+      default:
+        return 'STREET';
+    }
+  };
+
+  const handleRunAnalysis = async () => {
+    const payload: AnalyzeBuildRequest = {
+      vehicle_id: activeCar.id,
+      target_hp: buildGoals.targetHp,
+      max_budget_usd: buildGoals.budget,
+      activity_type: mapActivityToApi(buildGoals.activity),
+      reliability_floor: 70,
+      require_street_legal: true,
+    };
+
+    await runAnalysis(payload);
+    setActiveScreen('GARAGE');
+    };
+
+  
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-surface-dim text-on-surface font-sans selection:bg-primary selection:text-white">
       {!isAuthScreen && (
@@ -75,6 +119,11 @@ export default function App() {
         )}
         <main className={`flex-1 overflow-hidden relative transition-all duration-300 
           ${isAuthScreen ? 'ml-0' : (isSidebarOpen ? 'ml-0' : isSidebarCollapsed ? 'ml-0 md:ml-20' : 'ml-0 md:ml-64')}`}>
+
+          {analysisError && (<div className="absolute top-4 right-4 z-50 bg-red-900/80 text-white px-4 py-3 border border-red-500 shadow-xl">
+          {analysisError}</div>
+          )}
+          
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(224,30,34,0.03),transparent_70%)] pointer-events-none" />
           
           {activeScreen === 'LANDING' && (
@@ -95,25 +144,33 @@ export default function App() {
               <LoginPage onLogin={handleLogin} onBack={() => setActiveScreen('LANDING')} />
             )
           )}
+
+          {/* {activeScreen === 'BUILD_GOALS' && (
+            <BuildGoals
+              goals={buildGoals}
+              onUpdateGoals={setBuildGoals}
+              onProceed={() => setActiveScreen('GARAGE')}
+              onRunAnalysis={handleRunAnalysis}
+              isLoading={analysisLoading}
+            />
+          )} */}
+
           {activeScreen === 'GARAGE' && (
-            <Garage 
-              activeCar={activeCar} 
-              goals={buildGoals} 
-              onUpdateGoals={setBuildGoals} 
+            <Garage
+              activeCar={activeCar}
+              goals={buildGoals}
+              onUpdateGoals={setBuildGoals}
               onScreenChange={setActiveScreen}
+              analysis={analysis}
             />
           )}
+
           {activeScreen === 'INTELLIGENCE' && (
-            <ApexIntelligence car={activeCar} goals={buildGoals} />
+            <ApexIntelligence car={activeCar} goals={buildGoals} analysis={analysis} />
           )}
-          {activeScreen === 'BUILD_LOG' && (
-            <BuildLog activeCar={activeCar} />
-          )}
-          {activeScreen === 'AERO' && <Aero goals={buildGoals} />}
-          {activeScreen === 'DRIVETRAIN' && <Drivetrain goals={buildGoals} car={activeCar} />}
-          {activeScreen === 'CHASSIS' && <Chassis goals={buildGoals} />}
-          {activeScreen === 'ELECTRONICS' && <Electronics goals={buildGoals} />}
-          {activeScreen === 'PARTS_PRICING' && <PartsPricing />}
+
+          {activeScreen === 'DRIVETRAIN' && <Drivetrain goals={buildGoals} car={activeCar} analysis={analysis} />}
+
           {activeScreen === 'CATALOGUE' && (
             <Catalogue 
               activeCar={activeCar} 
@@ -122,21 +179,11 @@ export default function App() {
               onAddToGarage={(car) => setGarageCars(prev => prev.some(c => c.id === car.id) ? prev : [...prev, car])}
             />
           )}
-          {activeScreen === 'MARKETPLACE' && (
-            <ChassisMarketplace 
-              goals={buildGoals}
-              garageCars={garageCars}
-              onAddToGarage={(car) => setGarageCars(prev => prev.some(c => c.id === car.id) ? prev : [...prev, car])}
-            />
-          )}
-          {activeScreen === 'WATCHLIST' && <WatchList />}
-          {activeScreen === 'INTEL_FEED' && <IntelFeed />}
-          {activeScreen === 'TELEMETRY' && <Telemetry activeCar={activeCar} garageCars={garageCars} />}
-          {activeScreen === 'PERFORMANCE' && <Performance />}
-          {activeScreen === 'STAGING' && <Staging />}
-          {activeScreen === 'PRICING' && <Pricing />}
-          {activeScreen === 'RELIABILITY' && <Reliability />}
-          {activeScreen === 'WORKFLOW' && <Workflow />}
+
+          {activeScreen === 'PERFORMANCE' && <Performance analysis={analysis}/>}
+          {activeScreen === 'PRICING' && <Pricing analysis={analysis} budget={buildGoals.budget} />}
+          {activeScreen === 'RELIABILITY' && <Reliability analysis={analysis} />}
+          
           
           {/* Footer - Hidden on mobile for space */}
           <footer className="hidden md:flex absolute bottom-0 left-0 right-0 h-10 z-40 items-center justify-between px-6 bg-surface-container-low/80 backdrop-blur-md border-t border-outline-variant/10 cursor-crosshair">

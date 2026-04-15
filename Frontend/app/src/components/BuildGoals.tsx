@@ -6,6 +6,8 @@ interface BuildGoalsProps {
   goals: BuildGoalsType;
   onUpdateGoals: (goals: BuildGoalsType) => void;
   onProceed: () => void;
+  onRunAnalysis: () => void;
+  isLoading?: boolean;
 }
 
 const ACTIVITIES: { id: ActivityType; label: string; description: string }[] = [
@@ -16,7 +18,13 @@ const ACTIVITIES: { id: ActivityType; label: string; description: string }[] = [
   { id: 'STREET', label: 'STREET_PERF', description: 'OPTIMIZED_FOR_DAILY_DRIVABILITY' },
 ];
 
-export const BuildGoals: React.FC<BuildGoalsProps> = ({ goals, onUpdateGoals, onProceed }) => {
+export const BuildGoals: React.FC<BuildGoalsProps> = ({
+  goals,
+  onUpdateGoals,
+  onProceed,
+  onRunAnalysis,
+  isLoading = false,
+}) => {
   const handleChange = (field: keyof BuildGoalsType, value: any) => {
     onUpdateGoals({ ...goals, [field]: value });
   };
@@ -128,6 +136,28 @@ export const BuildGoals: React.FC<BuildGoalsProps> = ({ goals, onUpdateGoals, on
             className="bg-primary-container text-white px-12 py-5 font-headline font-black text-2xl italic tracking-widest uppercase hover:shadow-[0_0_40px_rgba(224,30,34,0.4)] transition-all active:scale-95 flex items-center gap-4"
           >
             INITIALIZE_BUILD <ChevronRight className="w-8 h-8" />
+          </button>
+        </div>
+
+        <div className="flex gap-4">
+          <button
+            onClick={onRunAnalysis}
+            disabled={isLoading}
+            className="bg-primary text-white px-6 py-3 flex items-center gap-3 hover:opacity-90 transition-all disabled:opacity-50"
+          >
+            <span className="font-headline text-sm font-bold uppercase tracking-widest italic">
+              {isLoading ? 'COMPUTING...' : 'COMPUTE_BUILD'}
+            </span>
+          </button>
+
+          <button
+            onClick={onProceed}
+            className="bg-surface-container-high border border-outline-variant/30 px-6 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-all"
+          >
+            <span className="font-headline text-sm font-bold uppercase tracking-widest italic">
+              CONTINUE
+            </span>
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

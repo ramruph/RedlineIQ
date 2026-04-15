@@ -2,6 +2,11 @@ import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, LineChart, Line } from 'recharts';
 import { CARS } from '../constants';
 import { Gauge, Zap, Wind, ShieldCheck, Cpu } from 'lucide-react';
+import type { BuildAnalysisResult } from '../types/api';
+
+interface PerformanceProps {
+  analysis?: BuildAnalysisResult | null;
+}
 
 const performanceData = [
   { rpm: 1000, torque: 200, power: 50 },
@@ -15,9 +20,13 @@ const performanceData = [
   { rpm: 9000, torque: 380, power: 720 },
 ];
 
-export const Performance: React.FC = () => {
+export const Performance: React.FC<PerformanceProps> = ({ analysis }) => {
   const activeCar = CARS.find(c => c.active) || CARS[0];
 
+const projectedHp = analysis?.simulation.projected_hp ?? activeCar.specs.hp;
+const projectedTorque = analysis?.simulation.projected_torque_lbft ?? 580;
+const zeroToSixty = analysis?.simulation.estimated_0_60_sec ?? null;
+const quarterMile = analysis?.simulation.estimated_quarter_mile_sec ?? null;
   return (
     <div className="p-8 h-full overflow-y-auto hide-scrollbar bg-surface-dim">
       <div className="grid grid-cols-12 gap-6">
@@ -30,14 +39,27 @@ export const Performance: React.FC = () => {
           <div className="flex gap-4">
             <div className="px-4 py-2 bg-surface-container-high border border-outline-variant/30">
               <span className="text-[9px] text-outline uppercase block">PEAK_POWER</span>
-              <span className="font-headline text-xl font-black text-primary italic">{activeCar.specs.hp} HP</span>
+              <span className="font-headline text-xl font-black text-primary italic">{projectedHp} HP</span>
             </div>
             <div className="px-4 py-2 bg-surface-container-high border border-outline-variant/30">
               <span className="text-[9px] text-outline uppercase block">MAX_TORQUE</span>
-              <span className="font-headline text-xl font-black text-secondary italic">580 LB-FT</span>
+              <span className="font-headline text-xl font-black text-secondary italic">{projectedTorque} LB-FT</span>
             </div>
           </div>
         </div>
+            <div className="px-4 py-2 bg-surface-container-high border border-outline-variant/30">
+              <span className="text-[9px] text-outline uppercase block">0_60_EST</span>
+              <span className="font-headline text-xl font-black text-secondary italic">
+                {zeroToSixty !== null ? `${zeroToSixty}s` : '--'}
+              </span>
+            </div>
+
+            <div className="px-4 py-2 bg-surface-container-high border border-outline-variant/30">
+              <span className="text-[9px] text-outline uppercase block">QUARTER_MILE_EST</span>
+              <span className="font-headline text-xl font-black text-secondary italic">
+                {quarterMile !== null ? `${quarterMile}s` : '--'}
+              </span>
+              </div>
 
         {/* Main Dyno Chart */}
         <div className="col-span-8 bg-surface-container-low p-6 border border-outline-variant/10 shadow-xl">
@@ -48,6 +70,7 @@ export const Performance: React.FC = () => {
                 <div className="w-3 h-3 bg-primary"></div>
                 <span className="text-[9px] font-black uppercase text-outline">HORSEPOWER (HP)</span>
               </div>
+
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-secondary"></div>
                 <span className="text-[9px] font-black uppercase text-outline">TORQUE (LB-FT)</span>

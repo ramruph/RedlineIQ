@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { 
+  LucideIcon,
   Search, 
   Bell, 
   Settings, 
@@ -29,6 +30,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { Screen, Car, User } from '../types';
+import { Shield } from 'lucide-react';
 
 interface SidebarProps {
   activeScreen: Screen;
@@ -51,20 +53,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeCar,
   user
 }) => {
+  
   const menuItems = [
-    { id: 'GARAGE', label: 'GARAGE_HOME', icon: LayoutDashboard },
-    { id: 'BUILD_LOG', label: 'BUILD_LOG', icon: ClipboardList },
-    { id: 'PROFILE', label: 'USER_PROFILE', icon: UserIcon },
-    { id: 'INTELLIGENCE', label: 'AI_LAB', icon: BrainCircuit },
-    { id: 'AERO', label: 'AERO', icon: Wind },
-    { id: 'DRIVETRAIN', label: 'DRIVETRAIN', icon: Settings2 },
-    { id: 'CHASSIS', label: 'CHASSIS', icon: CircleDot },
-    { id: 'ELECTRONICS', label: 'ELECTRONICS', icon: Cpu },
-    { id: 'CATALOGUE', label: 'CATALOGUE', icon: LayoutGrid },
-    { id: 'MARKETPLACE', label: 'MARKETPLACE', icon: DollarSign },
-    { id: 'WATCHLIST', label: 'WATCHLIST', icon: List },
-    { id: 'INTEL_FEED', label: 'INTEL_FEED', icon: Newspaper },
-  ];
+  { id: 'CATALOGUE', label: 'CATALOGUE', icon: LayoutGrid },
+  { id: 'BUILD_GOALS', label: 'BUILD_GOALS', icon: Target },
+  { id: 'GARAGE', label: 'GARAGE_HOME', icon: LayoutDashboard },
+  { id: 'DRIVETRAIN', label: 'DRIVETRAIN', icon: Settings2 },
+  { id: 'PERFORMANCE', label: 'PERFORMANCE', icon: BarChart3 },
+  { id: 'PRICING', label: 'PRICING', icon: DollarSign },
+  { id: 'INTELLIGENCE', label: 'INTELLIGENCE', icon: BrainCircuit },
+  { id: 'PROFILE', label: 'USER_PROFILE', icon: UserIcon },
+];
+
 
   return (
     <>
@@ -174,16 +174,26 @@ export const TopNav: React.FC<{
 }> = ({ activeScreen, onScreenChange, onToggleSidebar, onToggleCollapse, user }) => {
   const navLinks = [
     { id: 'GARAGE', label: 'GARAGE' },
-    { id: 'BUILD_LOG', label: 'LOG' },
-    { id: 'INTELLIGENCE', label: 'AI_LAB' },
-    { id: 'MARKETPLACE', label: 'MARKET' },
+    { id: 'BUILD_GOALS', label: 'GOALS' },
+    { id: 'INTELLIGENCE', label: 'INTELLIGENCE' },
     { id: 'CATALOGUE', label: 'CATALOGUE' },
-    { id: 'WATCHLIST', label: 'WATCHLIST' },
-    { id: 'INTEL_FEED', label: 'INTEL_FEED' },
-    { id: 'PARTS_PRICING', label: 'PRICING' },
-    { id: 'TELEMETRY', label: 'TELEMETRY' },
-    { id: 'STAGING', label: 'STAGING' },
+    { id: 'DRIVETRAIN', label: 'DRIVETRAIN' },
+    { id: 'PERFORMANCE', label: 'PERFORMANCE' },
+    { id: 'PRICING', label: 'PRICING' },
   ];
+  
+  // const navLinks = [
+  //   { id: 'GARAGE', label: 'GARAGE' },
+  //   { id: 'BUILD_LOG', label: 'LOG' },
+  //   { id: 'INTELLIGENCE', label: 'AI_LAB' },
+  //   { id: 'MARKETPLACE', label: 'MARKET' },
+  //   { id: 'CATALOGUE', label: 'CATALOGUE' },
+  //   { id: 'WATCHLIST', label: 'WATCHLIST' },
+  //   { id: 'INTEL_FEED', label: 'INTEL_FEED' },
+  //   { id: 'PARTS_PRICING', label: 'PRICING' },
+  //   { id: 'TELEMETRY', label: 'TELEMETRY' },
+  //   { id: 'STAGING', label: 'STAGING' },
+  // ];
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-6 py-4 bg-surface/80 backdrop-blur-xl shadow-[0_0_40px_rgba(255,180,171,0.05)] border-b border-outline-variant/10">

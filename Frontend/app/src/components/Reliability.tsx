@@ -1,5 +1,11 @@
 import React from 'react';
 import { ShieldAlert, Activity, Thermometer, Droplets, Zap } from 'lucide-react';
+import type { BuildAnalysisResult } from '../types/api';
+
+interface ReliabilityProps {
+  analysis?: BuildAnalysisResult | null;
+}
+
 
 const components = [
   { name: 'TURBOCHARGER_UNIT_A', wear: 12, temp: 84, status: 'OPTIMAL' },
@@ -10,7 +16,9 @@ const components = [
   { name: 'COOLING_RADIATOR', wear: 15, temp: 88, status: 'OPTIMAL' },
 ];
 
-export const Reliability: React.FC = () => {
+export const Reliability: React.FC<ReliabilityProps> = ({ analysis }) => {
+  const reliabilityScore = analysis?.score.reliability_score ?? 28.3;
+  const warnings = analysis?.warnings ?? [];
   return (
     <div className="p-8 h-full overflow-y-auto hide-scrollbar bg-surface-dim">
       <div className="grid grid-cols-12 gap-8">
@@ -22,8 +30,10 @@ export const Reliability: React.FC = () => {
           </div>
           <div className="flex gap-4">
             <div className="px-4 py-2 bg-surface-container-high border border-outline-variant/30">
-              <span className="text-[9px] text-outline uppercase block">AVG_WEAR</span>
-              <span className="font-headline text-xl font-black text-secondary italic">28.3%</span>
+            <span className="text-[9px] text-outline uppercase block">RELIABILITY_SCORE</span>
+            <span className="font-headline text-xl font-black text-secondary italic">
+              {reliabilityScore.toFixed(1)}
+            </span>
             </div>
           </div>
         </div>

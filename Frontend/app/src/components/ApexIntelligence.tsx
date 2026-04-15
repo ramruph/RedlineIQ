@@ -3,10 +3,13 @@ import { getTuningSuggestions } from '../services/geminiService';
 import { Sparkles, RefreshCw, Terminal, Cpu, Zap, Shield, Wind, Gauge, Activity, BrainCircuit, ChevronRight, Info, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Car, BuildGoals, Part } from '../types';
 import { DRIVETRAIN_PARTS } from '../constants';
+import type { BuildAnalysisResult } from '../types/api';
+
 
 interface ApexIntelligenceProps {
   car: Car;
   goals: BuildGoals;
+  analysis?: BuildAnalysisResult | null;
 }
 
 export const ApexIntelligence: React.FC<ApexIntelligenceProps> = ({ car, goals }) => {

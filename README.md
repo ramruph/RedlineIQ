@@ -10,19 +10,16 @@ RedlineIQ is an intelligent racecar/build planning platform that can answer thes
 - Which build path is most cost-efficient?
 - What real-world community evidence supports that recommendation?
 
-## Demo Screenshots
-
 ## Screenshots
 
 ### Dashboard View
-![Dashboard View](docs/images/Main Dashboard Screen.png) 
+![Dashboard View](docs/images/Main%20Dashboard%20Screen.png)
 
-### Build Optimizer
-![Build Optimizer](docs/images/Build Goal Screen.png) 
+### Build Screen
+![Build Optimizer](docs/images/Build%20Goal%20Screen.png)
 
 ### Garage Catalog Page
-![Results Page](docs/images/Garage Catalog Screen.png)
-
+![Results Page](docs/images/Garage%20Catalog%20Screen.png)
 
 
 

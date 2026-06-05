@@ -2,126 +2,31 @@
 
 
 ```
-┌──────────────────────────────── FRONTEND ────────────────────────────────┐
-│ React + TypeScript + Tailwind                                           │
-│                                                                         │
-│  BuildGoals   Garage   Drivetrain   Performance   Reliability   Pricing │
-│       │          │          │             │             │          │     │
-│       └──────────────────────┬─────────────────────────────────────┘     │
-│                              │                                           │
-│                    API calls to FastAPI backend                          │
-└──────────────────────────────┼───────────────────────────────────────────┘
-                               │
-                               ▼
-┌──────────────────────────── FASTAPI API ────────────────────────────────┐
-│ /validate-build                                                        │
-│ /score-build                                                           │
-│ /optimize-build                                                        │
-│ /simulate-build                                                        │
-│ /analyze-build                                                         │
-└──────────────────────────────┼──────────────────────────────────────────┘
-                               │
-                               ▼
-┌────────────────────────── APPLICATION LAYER ────────────────────────────┐
-│ Pydantic Schemas                                                       │
-│ - request validation                                                   │
-│ - response formatting                                                  │
-│                                                                        │
-│ Services / Repositories                                                │
-│ - load vehicles/parts                                                  │
-│ - query fitments                                                       │
-│ - return data to engine                                                │
-└──────────────────────────────┼──────────────────────────────────────────┘
-                               │
-                               ▼
-┌──────────────────────────── CORE ENGINE ────────────────────────────────┐
-│ Scoring Engine      -> score build quality                             │
-│ Constraint Engine   -> budget / compatibility / exclusions             │
-│ Optimizer           -> best part combination                           │
-│ Simulation Engine   -> hp / torque / 0-60 / cost outputs              │
-│ Reliability Engine  -> risk / penalty outputs                          │
-│ Explain Engine      -> why this build won                              │
-└──────────────────────────────┼──────────────────────────────────────────┘
-                               │
-                               ▼
-┌──────────────────────────── DATA LAYER ─────────────────────────────────┐
-│ SQLAlchemy ORM models                                                  │
-│ PostgreSQL                                                             │
-│                                                                        │
-│ tables:                                                                │
-│ vehicles, vehicle_specs, parts, part_fitments,                         │
-│ part_dependencies, part_exclusions, build_goals, build_results         │
-└─────────────────────────────────────────────────────────────────────────┘
+flowchart TD
+    A[Raw Data Files<br/>CSV, JSON, HTML, TXT, Parquet] --> B[Landing Zone<br/>data/raw]
 
-Later ML layers:
-- performance prediction model
-- learned ranking model
-- reliability classifier
-- personalization
-- telemetry anomaly detection
+    B --> C[Python Ingestion Layer<br/>pandas + pathlib + SQLAlchemy]
+    C --> D[Pydantic Validation<br/>schema contracts + type safety]
 
-```
+    D --> E[Raw/Staging Tables<br/>raw_forum_posts<br/>raw_course_transcripts<br/>raw_parts<br/>raw_vehicle_specs]
 
+    E --> F[Transform Layer<br/>SQL + Python + dbt later]
 
+    F --> G[Core RedlineIQ Tables<br/>vehicles<br/>vehicle_specs<br/>parts<br/>part_fitments<br/>part_dependencies<br/>part_exclusions]
 
-```
-redlineiq/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── health.py
-│   │   │   ├── validate.py
-│   │   │   ├── score.py
-│   │   │   ├── optimize.py
-│   │   │   ├── simulate.py
-│   │   │   └── analyze.py
-│   │   ├── core/
-│   │   │   └── config.py
-│   │   ├── db/
-│   │   │   ├── base.py
-│   │   │   ├── session.py
-│   │   │   └── init_db.py
-│   │   ├── domain/
-│   │   │   ├── enums.py
-│   │   │   └── constants.py
-│   │   ├── models/
-│   │   │   ├── vehicle.py
-│   │   │   ├── part.py
-│   │   │   └── build.py
-│   │   ├── schemas/
-│   │   │   ├── vehicle.py
-│   │   │   ├── part.py
-│   │   │   ├── build.py
-│   │   │   └── analysis.py
-│   │   ├── repositories/
-│   │   │   ├── vehicle_repo.py
-│   │   │   ├── part_repo.py
-│   │   │   └── build_repo.py
-│   │   ├── services/
-│   │   │   ├── loaders.py
-│   │   │   └── validators.py
-│   │   ├── engine/
-│   │   │   ├── scoring.py
-│   │   │   ├── constraints.py
-│   │   │   ├── optimizer.py
-│   │   │   ├── simulation.py
-│   │   │   ├── reliability.py
-│   │   │   ├── explain.py
-│   │   │   └── aggregate.py
-│   │   ├── data/
-│   │   │   ├── vehicles.csv
-│   │   │   ├── vehicle_specs.csv
-│   │   │   ├── parts.csv
-│   │   │   ├── part_fitments.csv
-│   │   │   ├── part_dependencies.csv
-│   │   │   └── part_exclusions.csv
-│   │   └── main.py
-│   ├── tests/
-│   ├── pyproject.toml
-│   ├── Dockerfile
-│   └── .env
-├── frontend/
-└── docker-compose.yml
+    F --> H[Evidence Tables<br/>evidence_part_mentions<br/>extracted_build_evidence<br/>build_outcomes]
+
+    G --> I[Analytics / App Layer<br/>FastAPI + frontend]
+    H --> I
+
+    G --> J[ML Feature Tables<br/>vehicle_part_features<br/>build_training_examples]
+    H --> J
+
+    J --> K[Model Training<br/>sklearn/XGBoost/PyTorch later]
+    K --> L[MLflow Registry<br/>models + metrics]
+
+    J --> M[Feature Store Later<br/>Feast]
+    M --> N[Prediction API<br/>FastAPI]
 ```
 
 
@@ -145,3 +50,24 @@ FastAPI is responsible for:
 - getting a database session
 - calling your engine logic
 - returning structured JSON responses
+
+RedlineIQ is an intelligent racecar/build planning platform that can answer questions like:
+- What parts combination gets me to 500 whp on a GR Supra within budget?
+- What supporting mods are required for this target?
+- What reliability risk am I creating?
+- What setup is best for drag / street / track / time attack?
+- Which build path is most cost-efficient?
+- What real-world community evidence supports that recommendation?
+
+
+
+
+
+
+
+## Resources
+- https://www.ultimatespecs.com/car-specs/Toyota/145989/Toyota-GR-Supra-30.html
+- a90shop.com
+- https://www.startmycar.com/us
+
+

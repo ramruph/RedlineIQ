@@ -20,5 +20,6 @@ __pycache__/
 node_modules/
 dist/
 build/
+planning_docs/
 
 .pytest_cache/

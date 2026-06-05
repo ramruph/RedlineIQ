@@ -145,7 +145,7 @@ export default function App() {
             )
           )}
 
-          {/* {activeScreen === 'BUILD_GOALS' && (
+          {activeScreen === 'BUILD_GOALS' && (
             <BuildGoals
               goals={buildGoals}
               onUpdateGoals={setBuildGoals}
@@ -153,7 +153,7 @@ export default function App() {
               onRunAnalysis={handleRunAnalysis}
               isLoading={analysisLoading}
             />
-          )} */}
+          )}
 
           {activeScreen === 'GARAGE' && (
             <Garage

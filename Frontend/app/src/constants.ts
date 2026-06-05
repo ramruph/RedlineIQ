@@ -2,9 +2,9 @@ import { Car, Part, LogEntry } from './types';
 
 export const CARS: Car[] = [
   {
-    id: 'A80_SUPRA',
-    name: 'A80_SUPRA',
-    platform: 'JZA80',
+    id: 'A90 SUPRA',
+    name: 'A90 SUPRA',
+    platform: 'JZA90',
     version: '4.2.1',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAxS-zr-4yWuhT9wYXORP_JgmVgCosAmnmpTLkVwuBCghCp6zF4z6vfZOsz7mfng2vSyArPwV8CNCCvMC-huVdslq2MKKb5UK60MP68fhHZ5WMlOxCMtIgfPXsiQvWjS7bmsIePAWEJZvdvTz3mSX3ibD7IVKFd8dT1Hbsr7CMVG9QPk5fB6au-C0lSCpceLi1sI3VqXxaEAJWNmYhU54JDrVlSAKIO2WMQvcGXoE7eVfGmFmw2erLF_zbpDoW5LerbxWsO0TSeEX4',
     price: 45000,
@@ -13,17 +13,17 @@ export const CARS: Car[] = [
     specs: {
       hp: 326,
       weight: 1510,
-      engine: '2JZ-GTE',
+      engine: 'B58',
       displacement: 3.0,
       wheelbase: 2550,
       mileage: 42000,
       transmission: 'MANUAL',
       drivetrain: 'RWD',
-      exteriorColor: 'RENAISSANCE_RED',
+      exteriorColor: 'TURBULENCE GRAY',
       interiorColor: 'BLACK_LEATHER',
       owners: 2,
       accidents: 0,
-      year: 1994,
+      year: 2022,
       bodyStyle: 'COUPE',
       fuelType: 'GASOLINE'
     },
@@ -35,7 +35,7 @@ export const CARS: Car[] = [
   },
   {
     id: 'R34_GTR',
-    name: 'R34_GTR',
+    name: 'R34 GTR',
     platform: 'BNR34',
     version: '2.8.0',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJv1I9oqXqmnOnOkCPWW4lLN298Z_G5LrqvkRvIzEpi6BsJ8hII3ARt651ujTDa3W9-lb9DelybgHuiGaUinbk3rlpHu_ZeoZYbqFaoha7caOMUSFjYnuw3cridBCY6PVhWf12oyLFar8jthRAFNp7eH4wvGXQwNHkmOIHoo2AmIFetuI9DYR1BUVugxxizUzLLsM6JDQO8AZXmm5RTDxxw9t_bxqpBcCidkkQwvzU8oUZy9daOTs-PS6Ix5e7GO9GuXlK2Nk33G0',
@@ -61,8 +61,8 @@ export const CARS: Car[] = [
     performance: { powerIndex: 65, gripCoefficient: 70, downforceBalance: 50 }
   },
   {
-    id: 'FD3S_RX7',
-    name: 'FD3S_RX7',
+    id: 'FD3S RX7',
+    name: 'FD3S RX7',
     platform: 'FD3S',
     version: '3.1.2',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCKOU7X9efFrTp-U1xzwrGk19L_T7kJ5lSo53spuMKLHoWY-JLSa4Xe9cNFgH9RHwHjFpKML4WT6BgvnYe9lrMr6iXl5zZAKIH6smMSTUZIF4-33V3O0cNxRQqaj9nr7pFGQJADsQ7Y5pcJmkYbh4NFfOZiYChCt5hjunwO0PxQY0xVtK9HHHs4iMJpZMvOAiG_ramA8WMrsqbTuhT0k4ZOFUkiR0NcqMCqD9BIzE08bLQPYCVqv_LLmM4b8O0Y81gegFpoQ4o10-Q',

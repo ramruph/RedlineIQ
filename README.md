@@ -12,11 +12,17 @@ RedlineIQ is an intelligent racecar/build planning platform that can answer thes
 
 ## Demo Screenshots
 
-<p align="center">
-  <img src="docs/images/Main Dashboard Screen.png" width="32%" />
-  <img src="docs/images/Garage Catalog Screen.png" width="32%" />
-  <img src="docs/images/Build Goal Screen.png" width="32%" />
-</p>
+## Screenshots
+
+### Dashboard View
+![Dashboard View](docs/images/Main Dashboard Screen.png) 
+
+### Build Optimizer
+![Build Optimizer](docs/images/Build Goal Screen.png) 
+
+### Garage Catalog Page
+![Results Page](docs/images/Garage Catalog Screen.png)
+
 
 
 

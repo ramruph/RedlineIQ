@@ -1,4 +1,8 @@
 *.csv
+#exclude the raw data csv from backend/app/data/ingestion/raw and backend/app/data/processed/redlineiq_cleaned  from csv exclusion but still ignore any other csv files that may be generated in the future
+!/ingestion/raw/forum_data_raw/forum_data/*.csv
+!/processed/redlineiq_cleaned/*.csv
+
 *.pkl
 *.ipynb_checkpoints
 __pycache__/

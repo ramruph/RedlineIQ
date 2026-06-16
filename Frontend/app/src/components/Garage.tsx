@@ -106,7 +106,7 @@ export const Garage: React.FC<GarageProps> = ({
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="bg-primary/10 text-primary px-2 py-0.5 font-mono text-[8px] font-bold border border-primary/20 uppercase tracking-widest">
-                REDLINE_IQ // HUB
+                REDLINE_IQ 
               </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-widest">
                 BUILD_ID: {activeCar.platform}-001
@@ -119,7 +119,7 @@ export const Garage: React.FC<GarageProps> = ({
 
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1 text-[10px] font-bold text-primary">
-                <Radar className="w-3.5 h-3.5" /> SYSTEM_DIAGNOSTICS_ACTIVE
+                <Radar className="w-3.5 h-3.5" /> 
               </span>
 
               <div className="flex gap-2 ml-4">

@@ -10,7 +10,15 @@ RedlineIQ is an intelligent racecar/build planning platform that can answer thes
 - Which build path is most cost-efficient?
 - What real-world community evidence supports that recommendation?
 
-## Screenshots
+
+
+
+
+
+
+
+
+## Screenshots of Prototype UI
 
 ### Dashboard View
 ![Dashboard View](docs/images/Main%20Dashboard%20Screen.png)
@@ -23,20 +31,13 @@ RedlineIQ is an intelligent racecar/build planning platform that can answer thes
 
 
 
-## Tools
-- PostgreSQL = storage
-- SQLAlchemy = database objects
-- Pydantic = API contracts
-- FastAPI = backend interface
-    - FastAPI is responsible for:
-        - receiving HTTP requests
-        - validating incoming data
-        - getting a database session
-        - calling your engine logic
-        - returning structured JSON responses
-- Engine = decision logic
-- Frontend = display layer
-- ML = intelligence layer
+
+
+
+
+
+## Version 1
+GenAI + ML recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
 
 
 

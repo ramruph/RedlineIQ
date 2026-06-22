@@ -1,8 +1,28 @@
 # RedlineIQ
+RedlineIQ is a performance car build planning platform that helps users choose parts, compare build paths, and understand the tradeoffs behind a modification plan.
+
+The current MVP focuses on the Toyota GR Supra A90/A91 platform and recommends parts based on vehicle fitment, build goal, target power, budget, risk level, and supporting evidence. The system also uses retrieval and an LLM to explain why a recommendation was made, but the long-term goal is much larger than an AI chatbot.
+
+RedlineIQ is being built as a data-driven automotive intelligence platform for enthusiasts, builders, and future ML-powered recommendation systems.
 
 
-## GOAL
-RedlineIQ is an intelligent racecar/build planning platform that can answer these questions:
+## Why I built this
+Planning a performance car build is hard because the information is scattered.
+
+A single build decision can involve:
+- Product pages
+- Forum posts
+- Dyno results
+- Track discussions
+- Tuning requirements
+- Supporting modifications
+- Fitment notes
+- Budget constraints
+- Reliability tradeoffs
+- Emissions and installation risks
+
+Most people end up jumping between forums, shops, YouTube videos, spreadsheets, and old posts to make decisions.
+#### Goal - Help answer questions like this:
 - What parts combination gets me to 500 whp on a GR Supra within budget?
 - What supporting mods are required for this target?
 - What reliability risk am I creating?
@@ -54,6 +74,9 @@ GenAI + ML recommendation and product analytics platform that transforms unstruc
 - https://fastapi.tiangolo.com/
 - https://medium.com/data-science/learning-to-rank-a-complete-guide-to-ranking-using-machine-learning-4c9688d370d4
 - https://ai.google.dev/gemini-api/docs
+- https://hub.docker.com/_/python
+- https://nginx.org/ 
+
 
 
 

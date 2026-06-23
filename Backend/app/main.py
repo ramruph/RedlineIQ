@@ -7,7 +7,7 @@ from app.database import find_one, get_database
 from app.routes import products, vehicles, recommend, evidence, analytics, rag
 from app.schemas import HealthResponse
 
-TITLE = os.getenv("API_NAME")
+TITLE = os.getenv("API_TITLE") 
 API_VERSION = os.getenv("API_VERSION")
 
 

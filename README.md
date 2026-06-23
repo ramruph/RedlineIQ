@@ -31,13 +31,6 @@ Most people end up jumping between forums, shops, YouTube videos, spreadsheets, 
 - What real-world community evidence supports that recommendation?
 
 
-### Accomplishments
-- Data gathered from various sources - forums, stores, racecar courses, vechicle specs
-- EDA, ETL, and Postgres schema design and data added to PostgreSQL
-- Built a FastAPI service over normalized PostgreSQL tables for 
-    - vehicles, variants, parts, fitment logic, recommendation rules, forum evidence, and RAG-ready chunks.
-
-
 
 
 
@@ -58,9 +51,6 @@ Most people end up jumping between forums, shops, YouTube videos, spreadsheets, 
 
 
 
-
-
-
 ## Version 1
 GenAI + ML recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
 
@@ -76,84 +66,13 @@ GenAI + ML recommendation and product analytics platform that transforms unstruc
 - https://ai.google.dev/gemini-api/docs
 - https://hub.docker.com/_/python
 - https://nginx.org/ 
+- https://ai.google.dev/gemini-api/docs
 
 
 
 
 
 
-# RedlineIQ
-
-## Problem
-Performance car build planning is noisy, fragmented, and high-risk.
-
-## Solution
-RedlineIQ uses GenAI, ML, RAG, and structured recommendation logic to generate explainable build plans.
-
-## Demo
-Screenshots and live app link.
-
-## Architecture
-Diagram of data → ML → RAG → API → UI → monitoring.
-
-## Data
-Parts catalog, forum evidence, dyno claims, lap times, HPA transcripts, chassis specs.
-
-## Data Cleaning
-Deduplication, category normalization, fitment extraction, risk extraction, evidence scoring.
-
-## ML System
-Recommendation scoring, dependency logic, optimization, ML ranking roadmap.
-
-## LLM System
-RAG, prompt versioning, grounded explanations, LLM evaluation.
-
-## MLOps
-MLflow, data validation, model registry, evaluation, monitoring.
-
-## LLMOps
-Tracing, prompt evaluation, latency/cost, unsupported-claim rate.
-
-## Product Analytics
-Funnels, save/export rate, evidence engagement, experiment design.
-
-## Deployment
-Docker, FastAPI, Postgres, frontend, CI/CD.
-
-## Limitations
-Not professional automotive advice, claims need validation, data coverage limitations.
-
-## Future Work
-More vehicles, price tracking, user feedback, bandit personalization, lap-time prediction.
 
 
 
-
-
-Local LLM:
-Ollama + gemma4:e2b
-
-Local embeddings:
-sentence-transformers/all-MiniLM-L6-v2 or BAAI/bge-small-en-v1.5
-
-Database:
-Postgres + pgvector
-
-Backend:
-FastAPI
-
-Deployment LLM:
-Gemini Flash
-
-Frontend:
-React/Vite on Vercel
-
-Backend hosting:
-Render
-
-Database hosting:
-Supabase
-
-
-
-https://ai.google.dev/gemini-api/docs

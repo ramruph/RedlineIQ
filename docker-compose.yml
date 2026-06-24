@@ -30,6 +30,10 @@ services:
       API_VERSION: 0.1.0
 
       DATABASE_URL: postgresql+psycopg2://redlineiq:redlineiq@db:5432/redlineiq
+      SQL_SCHEMA_PATH: /app/pipelines/db_schema/redlineiq_schema.sql
+      CLEANED_DATA_DIR: /app/data/cleaned
+
+
       FRONTEND_ORIGINS: http://localhost:3000,http://localhost:5173,http://localhost:8080
 
       LLM_PROVIDER: gemini
@@ -38,6 +42,8 @@ services:
 
       EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
       EMBEDDING_DIM: 384
+      EMBEDDING_BATCH_SIZE: 32
+      MAX_EMBED_CHUNKS: 250000
 
       LLM_TEMPERATURE: 0.2
       LLM_MAX_OUTPUT_TOKENS: 1200
@@ -50,11 +56,12 @@ services:
     volumes:
       - ./backend/app:/app/app
       - ./backend/pipelines:/app/pipelines
+      - ./data/cleaned:/app/data/cleaned
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
   
   frontend:
     build:
-      context: ./frontend/app
+      context: ./Frontend/app
       dockerfile: Dockerfile
       args:
         VITE_API_BASE_URL: http://localhost:8000

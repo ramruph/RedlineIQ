@@ -165,8 +165,7 @@ Potential metrics:
 
 
 
-
-## Version 1
+### Version 1.0
 GenAI + ML recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
 
 

@@ -8,7 +8,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Setting up python needed packages and build tools (curl, git etc)
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl git \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

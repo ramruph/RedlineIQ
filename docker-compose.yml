@@ -1,18 +1,18 @@
 services:
   db:
-    image: pgvector/pgvector:pg18-trixie
+    image: pgvector/pgvector:pg16
     container_name: redlineiq-db
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: redlineiq
       POSTGRES_USER: redlineiq
       POSTGRES_PASSWORD: redlineiq
     ports:
       - "5432:5432"
     volumes:
-      - redlineiq_pgdata:/var/lib/postgresql
+      - redlineiq_pgdata:/var/lib/postgresql/data
       - ./docker/postgres/init:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U redlineiq -d postgres"]
+      test: ["CMD-SHELL", "pg_isready -U redlineiq -d redlineiq"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -25,25 +25,30 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
       API_TITLE: RedlineIQ API
       API_VERSION: 0.1.0
 
-      DATABASE_URL: postgresql+psycopg2://redlineiq:redlineiq@db:5432/redlineiq
-      SQL_SCHEMA_PATH: /app/pipelines/db_schema/redlineiq_schema.sql
+      DATABASE_URL: ${DATABASE_URL}
+      SCHEMA_PATH: /app/pipelines/db_schema/redlineiq_schema.sql
       CLEANED_DATA_DIR: /app/data/cleaned
 
-
       FRONTEND_ORIGINS: http://localhost:3000,http://localhost:5173,http://localhost:8080
+      
+      # Local default ollama. Override in .env if using Gemini.
+      LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-gemma4:e2b}
 
-      LLM_PROVIDER: gemini
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash}
 
       EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
       EMBEDDING_DIM: 384
       EMBEDDING_BATCH_SIZE: 32
-      MAX_EMBED_CHUNKS: 250000
+      MAX_EMBED_CHUNKS: ${MAX_EMBED_CHUNKS:-5000}
 
       LLM_TEMPERATURE: 0.2
       LLM_MAX_OUTPUT_TOKENS: 1200

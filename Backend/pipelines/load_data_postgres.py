@@ -36,7 +36,7 @@ CLEANED_DATA_DIR = Path(
 
 SCHEMA_PATH = Path(
     os.getenv(
-        "SQL_SCHEMA_PATH",
+        "SCHEMA_PATH",
         PROJECT_ROOT / "backend" / "pipelines" / "db_schema"/ "redlineiq_schema.sql",
     )
 )

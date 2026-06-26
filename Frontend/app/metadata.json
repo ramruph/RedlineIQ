@@ -1,0 +1,5 @@
+{
+  "name": "RedlineIQ Dashboard",
+  "description": "A dashboard for visualizing and exploring RedlineIQ data, including vehicle information, product offerings, and forum evidence.",
+  "requestFramePermissions": []
+}

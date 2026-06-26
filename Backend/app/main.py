@@ -21,11 +21,11 @@ frontend_origins = os.getenv(
 origins = [
     origin.strip()
     for origin in frontend_origins.split(",")
-    if origin.strip()
-]
+    if origin.strip()]
+#CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origins],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"])
@@ -42,7 +42,11 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+    "status": "ok",
+    "service": "redlineiq-api",
+    "version": API_VERSION}
+
 
 # API Routes
 app.include_router(products.router, prefix="/api/v1/products", tags=["products"])

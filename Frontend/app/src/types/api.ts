@@ -147,3 +147,36 @@ export interface BuildExplanationResponse {
   retrieved_chunks: RetrievedChunk[];
 }
 
+export interface VehicleRequestPayload {
+  email: string;
+  make: string;
+  model: string;
+  generation?: string;
+  year_range?: string;
+  engine?: string;
+  use_case?: string;
+  why?: string;
+  source?: string;
+}
+
+export interface BuildSubmissionPayload {
+  email: string;
+  car: string;
+  engine?: string;
+  transmission?: string;
+  current_power?: string;
+  goal_power?: string;
+  budget?: string;
+  use_case?: string;
+  current_mods?: string;
+  pain_point?: string;
+  contact_ok?: boolean;
+  source?: string;
+}
+
+export interface LeadPayload {
+  email: string;
+  interest_area?: string;
+  message?: string;
+  source?: string;
+}

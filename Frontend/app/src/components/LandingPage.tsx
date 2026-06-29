@@ -1,7 +1,17 @@
 import { ArrowRight, Database, Gauge, Network, Sparkles } from 'lucide-react';
 import { Badge } from './ui';
 
-export function LandingPage({ onStart }: { onStart: () => void }) {
+export function LandingPage({
+  onOpenHome,
+  onOpenBuild,
+  onOpenIntake,
+  onOpenLearn,
+}: {
+  onOpenHome: () => void;
+  onOpenBuild: () => void;
+  onOpenIntake: () => void;
+  onOpenLearn: () => void;
+}) {
   return (
     <div className="min-h-screen overflow-x-hidden bg-surface-dim text-on-surface">
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_20%,rgba(112,151,117,0.20),transparent_34%),radial-gradient(circle_at_70%_70%,rgba(212,175,55,0.10),transparent_30%)]" />
@@ -12,10 +22,10 @@ export function LandingPage({ onStart }: { onStart: () => void }) {
             <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-on-surface-variant">Build Intelligence MVP</p>
           </div>
           <button
-            onClick={onStart}
+            onClick={onOpenHome}
             className="hidden items-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white hover:bg-primary-container md:flex"
           >
-            Open Planner <ArrowRight className="h-4 w-4" />
+            Enter App <ArrowRight className="h-4 w-4" />
           </button>
         </header>
 
@@ -32,22 +42,38 @@ export function LandingPage({ onStart }: { onStart: () => void }) {
               A90 Supra<br />Build Intelligence
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-on-surface-variant md:text-lg">
-              Generate explainable performance build recommendations from normalized vehicle, parts, fitment,
-              forum evidence, and tuning education data.
+              Plan performance builds with structured vehicle data, parts fitment, budget-aware scoring, and an
+              evidence-ready AI architecture. Current MVP focus: Toyota GR Supra A90/B58.
             </p>
 
             <div className="mt-8 grid gap-3 md:grid-cols-3">
               <Feature icon={Database} title="Real catalog" text="Products and fitments pulled from PostgreSQL." />
               <Feature icon={Gauge} title="Build scoring" text="Budget, power target, risk, and use-case scoring." />
-              <Feature icon={Network} title="Evidence layer" text="Forum and technical chunks ready for RAG." />
+              <Feature icon={Network} title="User signals" text="Request cars and submit builds to shape the roadmap." />
             </div>
 
-            <button
-              onClick={onStart}
-              className="mt-8 flex w-full items-center justify-center gap-2 bg-primary px-6 py-4 font-headline text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-primary-container md:w-auto"
-            >
-              Start Build Planner <Sparkles className="h-4 w-4" />
-            </button>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <button
+                onClick={onOpenBuild}
+                className="flex items-center justify-center gap-2 bg-primary px-6 py-4 font-headline text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-primary-container"
+              >
+                Try A90 Planner <Sparkles className="h-4 w-4" />
+              </button>
+
+              <button
+                onClick={onOpenIntake}
+                className="border border-outline-variant/70 px-6 py-4 font-headline text-xs font-black uppercase tracking-[0.25em] text-on-surface-variant hover:border-primary hover:text-primary"
+              >
+                Request a Car
+              </button>
+
+              <button
+                onClick={onOpenLearn}
+                className="border border-outline-variant/70 px-6 py-4 font-headline text-xs font-black uppercase tracking-[0.25em] text-on-surface-variant hover:border-secondary hover:text-secondary"
+              >
+                How It Works
+              </button>
+            </div>
           </section>
 
           <section className="relative">
@@ -65,7 +91,7 @@ export function LandingPage({ onStart }: { onStart: () => void }) {
                 </div>
                 <div className="text-right">
                   <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-on-surface-variant">MVP Status</p>
-                  <p className="font-headline text-xl font-black uppercase italic text-secondary">Deployable</p>
+                  <p className="font-headline text-xl font-black uppercase italic text-secondary">Public Preview</p>
                 </div>
               </div>
             </div>

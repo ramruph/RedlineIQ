@@ -24,7 +24,7 @@ export function LandingPage({
               RedlineIQ
             </p>
             <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-on-surface-variant">
-              GenAI Build Intelligence
+              ML/AI Build Intelligence
             </p>
           </button>
 
@@ -32,7 +32,7 @@ export function LandingPage({
             onClick={onOpenBuild}
             className="hidden items-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white hover:bg-primary-container md:flex"
           >
-            Enter Planner <ArrowRight className="h-4 w-4" />
+            Enter Garage <ArrowRight className="h-4 w-4" />
           </button>
         </header>
 
@@ -45,18 +45,10 @@ export function LandingPage({
 
           <section className="relative z-10 mx-auto max-w-5xl space-y-8">
             <div className="flex flex-wrap justify-center gap-2">
-              <Badge tone="primary">FastAPI</Badge>
-              <Badge tone="secondary">PostgreSQL</Badge>
-              <Badge>pgvector RAG</Badge>
-              <Badge>LLM Explanations</Badge>
+            
             </div>
 
-            <div className="inline-flex items-center gap-3 border border-primary/30 bg-primary/10 px-4 py-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-primary">
-                Toyota GR Supra A90 MVP
-              </span>
-            </div>
+            
 
             <h1 className="font-headline text-5xl font-black uppercase italic leading-[0.88] tracking-tighter md:text-7xl lg:text-8xl">
               Evidence-Grounded<br />
@@ -66,7 +58,7 @@ export function LandingPage({
             <p className="mx-auto max-w-3xl text-base leading-8 text-on-surface-variant md:text-lg">
               RedlineIQ helps plan performance builds using structured vehicle data, parts fitment,
               budget-aware recommendation logic, semantic evidence retrieval, and LLM-generated
-              explanations. The current MVP focuses on the Toyota GR Supra A90/B58 platform.
+              explanations. The current version only focuses on the Toyota GR Supra A90/B58 platform.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
@@ -116,9 +108,10 @@ export function LandingPage({
             <div className="mx-auto flex max-w-3xl items-start gap-3 border border-outline-variant/40 bg-surface-container-low p-4 text-left">
               <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-secondary" />
               <p className="text-sm leading-6 text-on-surface-variant">
-                MVP note: recommendations are for planning and research. The system is designed to surface
-                evidence, risks, and assumptions; final part selection should still be verified by a qualified
-                tuner or builder.
+                MVP note: Current load times may take longer
+                          than they should while the backend, RAG retrieval, and LLM explanation flow are being optimized.
+                          Performance improvements are planned. The system is designed to surface evidence, risks, and
+                          assumptions; final part selection should still be verified by a qualified tuner or builder.
               </p>
             </div>
           </section>

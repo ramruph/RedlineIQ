@@ -1,30 +1,104 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CarFront, ClipboardList, Send } from 'lucide-react';
+import { redlineApi } from '../lib/api';
 import { FieldLabel, Panel, SectionTitle } from './ui';
 
 type IntakeMode = 'vehicle_request' | 'current_build';
+type SubmitState = 'idle' | 'saving' | 'saved_to_api' | 'queued_locally' | 'error';
+
+type QueuedIntakeSubmission = {
+  type: IntakeMode;
+  payload: Record<string, FormDataEntryValue>;
+  created_at: string;
+  error?: string;
+};
+
+const INTAKE_QUEUE_KEY = 'redlineiq_intake_queue';
+
+function formValue(payload: Record<string, FormDataEntryValue>, key: string): string {
+  const value = payload[key];
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function queueSubmission(submission: QueuedIntakeSubmission) {
+  const existing = JSON.parse(localStorage.getItem(INTAKE_QUEUE_KEY) ?? '[]') as QueuedIntakeSubmission[];
+  localStorage.setItem(INTAKE_QUEUE_KEY, JSON.stringify([submission, ...existing]));
+}
 
 export function IntakePage() {
   const [mode, setMode] = useState<IntakeMode>('vehicle_request');
-  const [submitted, setSubmitted] = useState(false);
+  const [submitState, setSubmitState] = useState<SubmitState>('idle');
+  const [message, setMessage] = useState<string | null>(null);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const queuedCount = useMemo(() => {
+    try {
+      return (JSON.parse(localStorage.getItem(INTAKE_QUEUE_KEY) ?? '[]') as unknown[]).length;
+    } catch {
+      return 0;
+    }
+  }, [submitState]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const form = new FormData(event.currentTarget);
-    const payload = Object.fromEntries(form.entries());
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
+    const rawPayload = Object.fromEntries(form.entries());
 
-    const existing = JSON.parse(localStorage.getItem('redlineiq_intake_submissions') ?? '[]');
-    const submission = {
-      type: mode,
-      payload,
-      created_at: new Date().toISOString(),
-    };
+    setSubmitState('saving');
+    setMessage(null);
 
-    localStorage.setItem('redlineiq_intake_submissions', JSON.stringify([submission, ...existing]));
-    setSubmitted(true);
-    event.currentTarget.reset();
+    try {
+      if (mode === 'vehicle_request') {
+        await redlineApi.submitVehicleRequest({
+          email: formValue(rawPayload, 'email') || undefined,
+          make: formValue(rawPayload, 'make'),
+          model: formValue(rawPayload, 'model'),
+          generation: formValue(rawPayload, 'generation') || undefined,
+          year_range: formValue(rawPayload, 'year_range') || undefined,
+          engine: formValue(rawPayload, 'engine') || undefined,
+          use_case: formValue(rawPayload, 'use_case') || undefined,
+          why: formValue(rawPayload, 'why') || undefined,
+          source: 'web_mvp',
+        });
+      } else {
+        await redlineApi.submitBuildSubmission({
+          email: formValue(rawPayload, 'email') || undefined,
+          car: formValue(rawPayload, 'car'),
+          engine: formValue(rawPayload, 'engine') || undefined,
+          transmission: formValue(rawPayload, 'transmission') || undefined,
+          current_power: formValue(rawPayload, 'current_power') || undefined,
+          goal_power: formValue(rawPayload, 'goal_power') || undefined,
+          budget: formValue(rawPayload, 'budget') || undefined,
+          use_case: formValue(rawPayload, 'use_case') || undefined,
+          current_mods: formValue(rawPayload, 'current_mods') || undefined,
+          pain_point: formValue(rawPayload, 'pain_point') || undefined,
+          contact_ok: rawPayload.contact_ok === 'on',
+          source: 'web_mvp',
+        });
+      }
+
+      setSubmitState('saved_to_api');
+      setMessage('Submission saved to RedlineIQ. Thank you for helping shape the roadmap.');
+      formEl.reset();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown API error';
+
+      queueSubmission({
+        type: mode,
+        payload: rawPayload,
+        created_at: new Date().toISOString(),
+        error: errorMessage,
+      });
+
+      setSubmitState('queued_locally');
+      setMessage(
+        'The backend intake endpoint was not available, so this submission was queued locally in this browser. Once the API endpoint is deployed, this form will save directly to Postgres/Supabase.'
+      );
+    }
   }
+
+  const isSaving = submitState === 'saving';
 
   return (
     <div className="space-y-6">
@@ -38,24 +112,32 @@ export function IntakePage() {
 
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={() => {
                 setMode('vehicle_request');
-                setSubmitted(false);
+                setSubmitState('idle');
+                setMessage(null);
               }}
               className={`px-4 py-2 font-headline text-xs font-black uppercase tracking-widest ${
-                mode === 'vehicle_request' ? 'bg-primary text-white' : 'border border-outline-variant text-on-surface-variant'
+                mode === 'vehicle_request'
+                  ? 'bg-primary text-white'
+                  : 'border border-outline-variant text-on-surface-variant'
               }`}
             >
               Request Car
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 setMode('current_build');
-                setSubmitted(false);
+                setSubmitState('idle');
+                setMessage(null);
               }}
               className={`px-4 py-2 font-headline text-xs font-black uppercase tracking-widest ${
-                mode === 'current_build' ? 'bg-primary text-white' : 'border border-outline-variant text-on-surface-variant'
+                mode === 'current_build'
+                  ? 'bg-primary text-white'
+                  : 'border border-outline-variant text-on-surface-variant'
               }`}
             >
               Submit Build
@@ -64,17 +146,28 @@ export function IntakePage() {
         </div>
 
         <p className="mb-5 border border-outline-variant/40 bg-surface-container-low p-3 text-xs leading-5 text-on-surface-variant">
-          MVP note: this version stores submissions in your browser for the demo. The next backend step is to post these
-          forms to FastAPI and save them to Supabase intake tables.
+          MVP note: this form posts to FastAPI when the intake endpoints are available. If the backend is offline or
+          the endpoint has not been deployed yet, the submission is queued locally so the UI still works.
+          {queuedCount > 0 ? ` Local queued submissions in this browser: ${queuedCount}.` : ''}
         </p>
 
-        {submitted && (
-          <div className="mb-5 border border-primary/50 bg-primary/10 p-3 text-sm text-primary">
-            Submission captured locally for MVP demo.
+        {message && (
+          <div
+            className={`mb-5 border p-3 text-sm ${
+              submitState === 'saved_to_api'
+                ? 'border-primary/50 bg-primary/10 text-primary'
+                : 'border-yellow-500/40 bg-yellow-500/10 text-yellow-200'
+            }`}
+          >
+            {message}
           </div>
         )}
 
-        {mode === 'vehicle_request' ? <VehicleRequestForm onSubmit={handleSubmit} /> : <CurrentBuildForm onSubmit={handleSubmit} />}
+        {mode === 'vehicle_request' ? (
+          <VehicleRequestForm onSubmit={handleSubmit} isSaving={isSaving} />
+        ) : (
+          <CurrentBuildForm onSubmit={handleSubmit} isSaving={isSaving} />
+        )}
       </Panel>
 
       <Panel>
@@ -94,7 +187,13 @@ export function IntakePage() {
   );
 }
 
-function VehicleRequestForm({ onSubmit }: { onSubmit: (event: React.FormEvent<HTMLFormElement>) => void }) {
+function VehicleRequestForm({
+  onSubmit,
+  isSaving,
+}: {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  isSaving: boolean;
+}) {
   return (
     <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
       <FormField name="email" label="Email" type="email" required />
@@ -110,14 +209,23 @@ function VehicleRequestForm({ onSubmit }: { onSubmit: (event: React.FormEvent<HT
       />
       <TextAreaField name="why" label="Why should this car be onboarded?" placeholder="Tell me what build goals or parts decisions are hard for this platform." />
 
-      <button className="flex items-center justify-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white md:col-span-2">
-        Submit Vehicle Request <Send className="h-4 w-4" />
+      <button
+        disabled={isSaving}
+        className="flex items-center justify-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
+      >
+        {isSaving ? 'Submitting...' : 'Submit Vehicle Request'} <Send className="h-4 w-4" />
       </button>
     </form>
   );
 }
 
-function CurrentBuildForm({ onSubmit }: { onSubmit: (event: React.FormEvent<HTMLFormElement>) => void }) {
+function CurrentBuildForm({
+  onSubmit,
+  isSaving,
+}: {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  isSaving: boolean;
+}) {
   return (
     <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
       <FormField name="email" label="Email" type="email" required />
@@ -140,8 +248,11 @@ function CurrentBuildForm({ onSubmit }: { onSubmit: (event: React.FormEvent<HTML
         <span>It is okay to contact me about future RedlineIQ testing or build validation.</span>
       </label>
 
-      <button className="flex items-center justify-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white md:col-span-2">
-        Submit Current Build <ClipboardList className="h-4 w-4" />
+      <button
+        disabled={isSaving}
+        className="flex items-center justify-center gap-2 bg-primary px-5 py-3 font-headline text-xs font-black uppercase tracking-widest text-white disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
+      >
+        {isSaving ? 'Submitting...' : 'Submit Current Build'} <ClipboardList className="h-4 w-4" />
       </button>
     </form>
   );

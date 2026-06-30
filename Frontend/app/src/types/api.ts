@@ -148,7 +148,7 @@ export interface BuildExplanationResponse {
 }
 
 export interface VehicleRequestPayload {
-  email: string;
+  email?: string;
   make: string;
   model: string;
   generation?: string;
@@ -160,7 +160,7 @@ export interface VehicleRequestPayload {
 }
 
 export interface BuildSubmissionPayload {
-  email: string;
+  email?: string;
   car: string;
   engine?: string;
   transmission?: string;
@@ -179,4 +179,11 @@ export interface LeadPayload {
   interest_area?: string;
   message?: string;
   source?: string;
+}
+
+export interface IntakeResponse {
+  status: string;
+  type: string;
+  id: string;
+  created_at: string;
 }

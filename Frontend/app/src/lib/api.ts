@@ -4,6 +4,7 @@ import type {
   BuildExplanationResponse,
   BuildSubmissionPayload,
   EvidenceItem,
+  IntakeResponse,
   LeadPayload,
   Product,
   RecommendRequest,
@@ -13,20 +14,60 @@ import type {
   VehicleVariant,
 } from '../types/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://127.0.0.1:8000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://127.0.0.1:8000';
 
 export class ApiError extends Error {
   status: number;
+  details?: unknown;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, details?: unknown) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.details = details;
+  }
+}
+
+async function parseErrorMessage(response: Response): Promise<{ message: string; details?: unknown }> {
+  const fallback = `Request failed with status ${response.status}`;
+
+  try {
+    const data = await response.json();
+
+    if (typeof data?.detail === 'string') {
+      return { message: data.detail, details: data };
+    }
+
+    if (data?.detail?.message) {
+      return { message: data.detail.message, details: data };
+    }
+
+    if (Array.isArray(data?.detail)) {
+      return {
+        message: data.detail
+          .map((item: unknown) => {
+            if (typeof item === 'string') return item;
+            return JSON.stringify(item);
+          })
+          .join(', '),
+        details: data,
+      };
+    }
+
+    if (typeof data?.message === 'string') {
+      return { message: data.message, details: data };
+    }
+
+    return { message: fallback, details: data };
+  } catch {
+    const text = await response.text().catch(() => '');
+    return { message: text || fallback };
   }
 }
 
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const hasBody = options.body !== undefined;
+  const hasBody = options.body !== undefined && options.body !== null;
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
@@ -37,26 +78,17 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
   });
 
   if (!response.ok) {
-    let message = `Request failed with status ${response.status}`;
-
-    try {
-      const data = await response.json();
-      if (typeof data?.detail === 'string') {
-        message = data.detail;
-      } else if (data?.detail?.message) {
-        message = data.detail.message;
-      } else if (Array.isArray(data?.detail)) {
-        message = data.detail.map((item: unknown) => JSON.stringify(item)).join(', ');
-      }
-    } catch {
-      const text = await response.text().catch(() => '');
-      if (text) message = text;
-    }
-
-    throw new ApiError(message, response.status);
+    const { message, details } = await parseErrorMessage(response);
+    throw new ApiError(message, response.status, details);
   }
 
   if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const contentType = response.headers.get('content-type') ?? '';
+
+  if (!contentType.includes('application/json')) {
     return undefined as T;
   }
 
@@ -81,7 +113,8 @@ export const redlineApi = {
 
   vehicles: () => apiFetch<Vehicle[]>('/api/v1/vehicles/'),
 
-  variants: (vehicleId: string) => apiFetch<VehicleVariant[]>(`/api/v1/vehicles/${vehicleId}/variants`),
+  variants: (vehicleId: string) =>
+    apiFetch<VehicleVariant[]>(`/api/v1/vehicles/${vehicleId}/variants`),
 
   products: (params: {
     vehicle_id?: string | null;
@@ -126,19 +159,19 @@ export const redlineApi = {
   analytics: () => apiFetch<AnalyticsSummary>('/api/v1/analytics/summary'),
 
   submitVehicleRequest: (payload: VehicleRequestPayload) =>
-    apiFetch<{ status: string; request_id?: string }>('/api/v1/intake/vehicle-request', {
+    apiFetch<IntakeResponse>('/api/v1/intake/vehicle-request', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   submitBuildSubmission: (payload: BuildSubmissionPayload) =>
-    apiFetch<{ status: string; submission_id?: string }>('/api/v1/intake/build-submission', {
+    apiFetch<IntakeResponse>('/api/v1/intake/build-submission', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   submitLead: (payload: LeadPayload) =>
-    apiFetch<{ status: string; lead_id?: string }>('/api/v1/intake/lead', {
+    apiFetch<IntakeResponse>('/api/v1/intake/lead', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),

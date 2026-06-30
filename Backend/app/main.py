@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from app.database import find_one, get_database
-from app.routes import products, vehicles, recommend, evidence, analytics, rag
+from app.routes import products, vehicles, recommend, evidence, analytics, rag, intake
 from app.schemas import HealthResponse
 
 TITLE = os.getenv("API_TITLE") 
@@ -57,5 +57,5 @@ app.include_router(recommend.router, prefix="/api/v1/recommend", tags=["recommen
 app.include_router(evidence.router, prefix="/api/v1/evidence", tags=["evidence"])
 app.include_router(rag.router, prefix="/api/v1/rag", tags=["rag"])
 app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["analytics"])
-
+app.include_router(intake.router, prefix="/api/v1/intake", tags=["intake"])
 

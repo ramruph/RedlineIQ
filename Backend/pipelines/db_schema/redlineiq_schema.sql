@@ -272,3 +272,44 @@ CREATE TABLE IF NOT EXISTS llm_runs (
     latency_ms NUMERIC,
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+
+CREATE TABLE IF NOT EXISTS mvp_vehicle_requests (
+    request_id TEXT PRIMARY KEY,
+    email TEXT,
+    make TEXT NOT NULL,
+    model TEXT NOT NULL,
+    generation TEXT,
+    year_range TEXT,
+    engine TEXT,
+    use_case TEXT,
+    why TEXT,
+    source TEXT DEFAULT 'web_mvp',
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS mvp_build_submissions (
+    submission_id TEXT PRIMARY KEY,
+    email TEXT,
+    car TEXT NOT NULL,
+    engine TEXT,
+    transmission TEXT,
+    current_power TEXT,
+    goal_power TEXT,
+    budget TEXT,
+    use_case TEXT,
+    current_mods TEXT,
+    pain_point TEXT,
+    contact_ok BOOLEAN DEFAULT FALSE,
+    source TEXT DEFAULT 'web_mvp',
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS mvp_leads (
+    lead_id TEXT PRIMARY KEY,
+    email TEXT NOT NULL,
+    interest_area TEXT,
+    message TEXT,
+    source TEXT DEFAULT 'web_mvp',
+    created_at TIMESTAMP DEFAULT NOW()
+);

@@ -1,15 +1,33 @@
-# RedlineIQ
-RedlineIQ is a performance car build planning platform that helps users choose parts, compare build paths, and understand the tradeoffs behind a modification plan.
+<p align="center">
+  <img src="docs/images/SupraAtSebring.JPG" width="850" alt="Me and Toyota Supra on track at Sebring">
+</p>
 
-The current version focuses on the Toyota GR Supra A90/A91 platform and recommends parts based on vehicle fitment, build goal, target power, budget, risk level, and supporting evidence. The system also uses retrieval and an LLM to explain why a recommendation was made, but the long-term goal is much larger than an AI chatbot.
+<h1 align="center">RedlineIQ</h1>
 
-RedlineIQ is being built as a data-driven automotive intelligence platform for enthusiasts, builders, and future ML-powered recommendation systems.
+<p align="center">
+  <strong>Automotive Intelligence Platform for Performance Car Build Planning</strong>
+</p>
 
+
+<p align="center">
+  <a href="#demo">Demo</a> |
+  <a href="#why-i-built-this">Why</a> |
+  <a href="#tech-stack">Tech Stack</a> |
+  <a href="#data-pipeline">Data Pipeline</a> |
+  <a href="#genai--rag-flow">GenAI / RAG</a> |
+  <a href="#run-locally">Run Locally</a> |
+  <a href="#deployment">Deployment</a> |
+  <a href="#roadmap">Roadmap</a> |
+  <a href="#screenshots-of-prototype-ui">Screenshots</a> |
+  <a href="#resources-and-links">Resources</a>
+</p>
+
+RedlineIQ is a data-driven automotive intelligence platform for performance car build planning. It turns scattered, unstructured automotive knowledge into a structured recommendation system that helps enthusiasts compare parts, understand tradeoffs, evaluate risks, and choose build paths based on goals, budget, fitment, and supporting evidence.
+
+The current MVP focuses on the Toyota GR Supra A90/A91 platform and combines a React frontend, FastAPI backend, PostgreSQL database, `pgvector` semantic search, and LLM-generated explanations grounded in retrieved evidence.
 
 ## Why I built this
-Planning a performance car build is hard because the information is scattered.
-
-A single build decision can involve:
+RedlineIQ was built from a personal connection to cars, motorsports, and machine learning. From personal experience, planning a perfromance car build is a conveluted and windy road of research and facts gathering. The information comes from various sources and depending on the task at hand. A single build decision can involve:
 - Parts (Products) pages
 - Forum posts
 - Dyno results
@@ -20,10 +38,11 @@ A single build decision can involve:
 - Budget constraints
 - Reliability tradeoffs
 - Emissions and installation risks
+- Many other factors.
 
-RedlineIQ brings this information into one structured system so users can compare build paths with more context.
+The long-term vision is to build an automotive intelligence platform for performance builds, not just a parts recommender or chatbot.
 
-#### Goal - Help answer questions like this:
+### Questions RedlineIQ Helps Answer
 - What parts combination gets me to 500 whp on a GR Supra within budget?
 - What supporting mods are required for this target?
 - What reliability risk am I creating?
@@ -32,27 +51,146 @@ RedlineIQ brings this information into one structured system so users can compar
 - What real-world community evidence supports that recommendation?
 
 
+## Tech Stack
+### Frontend
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Vercel deployment
+### Backend
+- FastAPI
+- Python
+- SQLAlchemy
+- Pydantic
+- Render deployment
+### Database
+- PostgreSQL
+- pgvector
+- Normalized relational schema for vehicles, variants, engines, products, fitments, evidence, and RAG chunks
+
+### GenAI / RAG
+- Local LLM development with Ollama
+- Production LLM provider through backend API configuration
+- Sentence-transformer embeddings (Huggingface)
+- pgvector semantic search
+- Grounded prompt templates
+- Retrieved evidence returned with the generated answer
 
 
+## Database Schema
+RedlineIQ uses a normalized PostgreSQL schema with `pgvector` support to store vehicle data, product metadata, part fitment, build evidence, and RAG chunks.
 
+View the full SQL schema here:
 
+[View RedlineIQ SQL Schema](backend/pipelines/db_schema/redlineiq_schema.sql)
 
-## Screenshots of Prototype UI
+## Data Pipeline
+```
+Scraped product/forum/course data
+        ↓
+Cleaning and normalization
+        ↓
+PostgreSQL relational tables
+        ↓
+RAG chunk generation
+        ↓
+Embedding generation
+        ↓
+pgvector semantic search
+        ↓
+LLM grounded response
+```
 
-### Dashboard View
-![Dashboard View](docs/images/Main%20Dashboard%20Screen.png)
+## GenAI / RAG Flow
+- The LLM is instructed to:
+    - Use only retrieved evidence for factual claims
+    - Avoid inventing product claims, fitment, prices, dyno numbers, or reliability outcomes
+    - Separate stated evidence from inferred recommendations
+    - Mention risks and dependencies
+    - Provide a confidence score
 
-### Build Screen
-![Build Optimizer](docs/images/Build%20Goal%20Screen.png)
+```
+User build request
+        ↓
+Recommended products generated
+        ↓
+Build explanation query created
+        ↓
+Query embedded
+        ↓
+pgvector retrieves similar evidence chunks
+        ↓
+Prompt created with retrieved evidence
+        ↓
+LLM generates grounded explanation
+        ↓
+Answer + evidence returned to frontend
+```
 
-### Garage Catalog Page
-![Results Page](docs/images/Garage%20Catalog%20Screen.png)
+## Run Locally
+You can run the project locally either with Docker (recommended) or by running the services manually.
 
+#### Option 1: Docker (Recommended)
+If you have Docker installed, you can spin up the full stack (frontend, backend, and database) with a single command:
+
+```
+docker compose up --build
+```
+
+This will start all services and handle dependencies automatically.
+
+#### Option 2: Manual Setup
+##### Backend
+```cd backend
+uvicorn app.main:app --reload 
+``` 
+##### Frontend
+```cd app
+npm install
+npm run dev
+```
+##### Environment Variables
+Frontend:
+```
+VITE_API_BASE_URL=http://127.0.0.1:8000
+```
+Backend:
+```
+DATABASE_URL=your_database_url
+LLM_PROVIDER=ollama_or_production_provider
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+EMBEDDING_DIM=384
+PROMPT_VERSION=redlineiq_rag_v1
+```
+
+## Deployment
+
+### Current:
+
+This version is deployed using:
+- Vercel for the React/Vite frontend
+- Render for the FastAPI backend
+- Supabase Hosted PostgreSQL with pgvector support
+
+Both frontend and backend are connected to GitHub and redeploy on push.
+
+### Future Scaling Plan
+
+The current MVP is beginning to run into memory limits on free-tier hosting. Future infrastructure will focus on services that can scale more efficiently as the platform expands to include deeper machine learning, larger datasets, more supported vehicles, more parts, and additional GenAI workflows.
+
+Potential future improvements include:
+
+- Dedicated backend compute
+- Managed PostgreSQL with stronger memory and storage limits
+- Background jobs for scraping, embedding, and extraction pipelines
+- CI/CD checks for backend, frontend, and data pipeline changes
+- Observability for API latency, retrieval quality, and LLM cost/performance
 
 
 ## Roadmap
 
-### Version 0.1 — MVP
+### Version 0.1 — This Version
 
 - Toyota GR Supra A90/A91 support
 - Build recommendation API
@@ -163,25 +301,41 @@ Potential metrics:
 - User save rate
 - Build acceptance rate
 
+### Version 1.0 — Long-Term Vision
+
+RedlineIQ aims to become a GenAI and ML-powered recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
 
 
-### Version 1.0
-GenAI + ML recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
+## Screenshots of Prototype UI
+<p align="center">
+  <strong>RedlineIQ Prototype Dashboard</strong>
+</p>
+
+<p align="center">
+  <img src="docs/images/Main%20Dashboard%20Screen.png" width="850" alt="RedlineIQ dashboard view">
+</p>
+
+<p align="center">
+  <strong>Garage Catalog Page</strong>
+</p>
 
 
-
-
+<p align="center">
+  <img src="docs/images/Garage%20Catalog%20Screen.png" width="850" alt="RedlineIQ garage catalog page">
+</p>
 
 ## Resources and Links
-- https://www.ultimatespecs.com/car-specs/Toyota/145989/Toyota-GR-Supra-30.html
-- a90shop.com
-- https://www.startmycar.com/us
-- https://fastapi.tiangolo.com/
-- https://medium.com/data-science/learning-to-rank-a-complete-guide-to-ranking-using-machine-learning-4c9688d370d4
-- https://ai.google.dev/gemini-api/docs
-- https://hub.docker.com/_/python
-- https://nginx.org/ 
-- https://ai.google.dev/gemini-api/docs
+
+- [Toyota GR Supra 3.0 specs - Ultimate Specs](https://www.ultimatespecs.com/car-specs/Toyota/145989/Toyota-GR-Supra-30.html)
+- [A90 Shop](https://www.a90shop.com/)
+- [StartMyCar](https://www.startmycar.com/us)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [Learning to Rank Guide](https://medium.com/data-science/learning-to-rank-a-complete-guide-to-ranking-using-machine-learning-4c9688d370d4)
+- [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [Python Docker Image](https://hub.docker.com/_/python)
+- [NGINX Documentation](https://nginx.org/)
+
+
 
 
 

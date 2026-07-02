@@ -12,6 +12,7 @@
 <p align="center">
   <a href="#demo">Demo</a> |
   <a href="#why-i-built-this">Why</a> |
+  <a href="#tldr-summary">TLDR</a> |
   <a href="#tech-stack">Tech Stack</a> |
   <a href="#data-pipeline">Data Pipeline</a> |
   <a href="#genai--rag-flow">GenAI / RAG</a> |
@@ -22,13 +23,26 @@
   <a href="#resources-and-links">Resources</a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-Backend-blue" alt="Python badge">
+  <img src="https://img.shields.io/badge/FastAPI-API-green" alt="FastAPI badge">
+  <img src="https://img.shields.io/badge/React-Frontend-blue" alt="React badge">
+  <img src="https://img.shields.io/badge/TypeScript-Frontend-blue" alt="TypeScript badge">
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-blue" alt="PostgreSQL badge">
+  <img src="https://img.shields.io/badge/pgvector-Semantic_Search-purple" alt="pgvector badge">
+  <img src="https://img.shields.io/badge/RAG-GenAI-orange" alt="RAG badge">
+  <img src="https://img.shields.io/badge/Docker-Ready-blue" alt="Docker badge">
+</p>
 
 RedlineIQ is a data-driven automotive intelligence platform for performance car build planning. It turns scattered, unstructured automotive knowledge into a structured recommendation system that helps enthusiasts compare parts, understand tradeoffs, evaluate risks, and choose build paths based on goals, budget, fitment, and supporting evidence.
 
-The current MVP focuses on the Toyota GR Supra A90/A91 platform and combines a React frontend, FastAPI backend, PostgreSQL database, `pgvector` semantic search, and LLM-generated explanations grounded in retrieved evidence.
+The current MVP focuses on the Toyota GR Supra A90 platform and combines a React frontend, FastAPI backend, PostgreSQL database, `pgvector` semantic search, and LLM-generated explanations grounded in retrieved evidence.
 
 ## Why I built this
-RedlineIQ was built from a personal connection to cars, motorsports, and machine learning. From personal experience, planning a perfromance car build is a conveluted and windy road of research and facts gathering. The information comes from various sources and depending on the task at hand. A single build decision can involve:
+RedlineIQ was built from a personal connection to cars, motorsports, and machine learning. From my own experience, planning a serious performance car build can become a messy research process. Information is scattered across product pages, forums, dyno results, tuning discussions, fitment notes, budget constraints, reliability tradeoffs, and real-world community feedback.
+
+The goal of RedlineIQ is to turn that scattered knowledge into structured intelligence for better build planning.
+
 - Parts (Products) pages
 - Forum posts
 - Dyno results
@@ -42,6 +56,7 @@ RedlineIQ was built from a personal connection to cars, motorsports, and machine
 - Many other factors.
 
 The long-term vision is to build an automotive intelligence platform for performance builds, not just a parts recommender or chatbot.
+
 
 ### Questions RedlineIQ Helps Answer
 - What parts combination gets me to 500 whp on a GR Supra within budget?
@@ -188,6 +203,14 @@ Potential future improvements include:
 - CI/CD checks for backend, frontend, and data pipeline changes
 - Observability for API latency, retrieval quality, and LLM cost/performance
 
+## Current Limitations
+
+- Current MVP focuses on the Toyota GR Supra A90/A91 platform.
+- Product and fitment coverage is still expanding.
+- Recommendations are intended for research and planning, not professional mechanical advice.
+- Free-tier hosting may cause slower initial load times.
+- Retrieval quality and recommendation ranking are still being evaluated.
+- Parts data, pricing, and availability can change over time and should be verified before purchase.
 
 ## Roadmap
 
@@ -307,6 +330,9 @@ Potential metrics:
 RedlineIQ aims to become a GenAI and ML-powered recommendation and product analytics platform that transforms unstructured automotive parts data into structured intelligence, recommends optimized build paths, and measures product impact through experimentation-ready metrics.
 
 
+
+
+
 ## Screenshots of Prototype UI
 <p align="center">
   <strong>RedlineIQ Prototype Dashboard</strong>
@@ -324,6 +350,26 @@ RedlineIQ aims to become a GenAI and ML-powered recommendation and product analy
 <p align="center">
   <img src="docs/images/Garage%20Catalog%20Screen.png" width="850" alt="RedlineIQ garage catalog page">
 </p>
+
+
+
+## TLDR Summary
+
+RedlineIQ is a full-stack data product that demonstrates backend API development, relational data modeling, semantic search, Retrieval-Augmented Generation, recommendation logic, data pipeline design, Dockerized development, and cloud deployment.
+
+The project shows the ability to take a messy real-world domain, structure the data, build retrieval and recommendation workflows, expose them through production-style APIs, and deliver them through a user-facing application.
+
+### Data Science / ML Highlights
+
+RedlineIQ demonstrates applied data science through:
+
+- Structured data modeling from messy automotive sources
+- Product and fitment data normalization
+- Semantic search using sentence-transformer embeddings and `pgvector`
+- Retrieval-Augmented Generation for grounded build explanations
+- Recommendation logic based on goals, budget, fitment, risks, and supporting evidence
+- Planned ranking models using user interaction signals
+- Evaluation roadmap using Precision@K, Recall@K, NDCG@K, MRR, constraint violation rate, and build acceptance rate
 
 ## Resources and Links
 

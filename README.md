@@ -36,7 +36,7 @@
 
 RedlineIQ is a data-driven automotive intelligence platform for performance car build planning. It turns scattered, unstructured automotive knowledge into a structured recommendation system that helps enthusiasts compare parts, understand tradeoffs, evaluate risks, and choose build paths based on goals, budget, fitment, and supporting evidence.
 
-The current MVP focuses on the Toyota GR Supra A90 platform and combines a React frontend, FastAPI backend, PostgreSQL database, `pgvector` semantic search, and LLM-generated explanations grounded in retrieved evidence.
+The current MVP focuses on the Toyota GR Supra A90 platform and combines a React frontend, FastAPI backend, PostgreSQL database, `pgvector` semantic search, and LLM-generated explanations grounded in retrieved evidence. 
 
 ## Why I built this
 RedlineIQ was built from a personal connection to cars, motorsports, and machine learning. From my own experience, planning a serious performance car build can become a messy research process. Information is scattered across product pages, forums, dyno results, tuning discussions, fitment notes, budget constraints, reliability tradeoffs, and real-world community feedback.
